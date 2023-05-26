@@ -7,6 +7,7 @@ struct Data {} // User data, which is stored and accessible in all command invoc
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
 
+
 /// Responds with "world!"
 #[poise::command(slash_command)]
 async fn defang(ctx: Context<'_>,
@@ -14,7 +15,9 @@ async fn defang(ctx: Context<'_>,
     url: Option<String>
 ) -> Result<(), Error> {
 
-    ctx.say(format!("``` {} ```", url.unwrap_or_default().replace(":", "[:]"))).await?;
+    let url: String = input.chars().rev().collect::<String>().replacen(".", "].[", 1).chars().rev().collect::<String>().replacen(":", "[:]", 1);
+    
+    ctx.say(format!("``` {} ```", url)).await?;
 
     Ok(())
 }
